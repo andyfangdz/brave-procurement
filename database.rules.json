@@ -1,0 +1,6 @@
+{
+  "rules": {
+    ".read": "auth.token.isBrave === true",
+    ".write": "auth.token.isBrave === true"
+  }
+}
