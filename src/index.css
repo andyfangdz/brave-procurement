@@ -8,3 +8,11 @@ body {
   box-sizing: border-box;
   padding-top: 64px;
 }
+
+div.react-bs-table-container > div > div.react-bs-container-body > table > tbody > tr > td {
+  white-space: normal;
+}
+
+div.react-bs-table-container > div > div.react-bs-container-header > table > thead > tr > th {
+  white-space: normal;
+}

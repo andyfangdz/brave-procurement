@@ -3,7 +3,11 @@
  */
 import React, {Component} from 'react';
 import base from '../firebase';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import $ from 'jquery';
+window.$ = $;
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
@@ -15,7 +19,9 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 
 
 import CenteredProgress from './common/CenteredProgress';
-
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -60,31 +66,23 @@ export default class Dashboard extends Component {
             </IconMenu>
           </ToolbarGroup>
         </Toolbar>
-        <Table multiSelectable={true}>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Fade Volume</TableHeaderColumn>
-              <TableHeaderColumn>Days Left</TableHeaderColumn>
-              <TableHeaderColumn>Fade Sell</TableHeaderColumn>
-              <TableHeaderColumn>Jita Sell</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {
-              this.state.items.map((item) =>
-                <TableRow key={item.id}>
-                  <TableRowColumn>{item.name}</TableRowColumn>
-                  <TableRowColumn>{item.dailyVolume}</TableRowColumn>
-                  <TableRowColumn>{item.daysLeft}</TableRowColumn>
-                  <TableRowColumn>{item.marketSellPrice}</TableRowColumn>
-                  <TableRowColumn>{item.hubSellPrice}</TableRowColumn>
-                </TableRow>
-              )
-            }
-
-          </TableBody>
-        </Table>
+        <BootstrapTable data={this.state.items} options={{
+          defaultSortName: 'days_left',
+          defaultSortOrder: 'asc'
+        }}
+                        containerStyle={{whiteSpace: "normal"}}
+        >
+          <TableHeaderColumn isKey dataField='id' hidden={true}>ID</TableHeaderColumn>
+          <TableHeaderColumn dataField='name' filter={ { type: 'TextFilter', delay: 100 } } dataSort={ true }>Name</TableHeaderColumn>
+          <TableHeaderColumn dataField='profit_per_m3' dataFormat={numberWithCommas} dataSort={ true }>Profit/m&sup3;</TableHeaderColumn>
+          <TableHeaderColumn dataField='days_left' dataSort={ true }>Days Left</TableHeaderColumn>
+          <TableHeaderColumn dataField='volume' dataSort={ true }>Volume (m&sup3;)</TableHeaderColumn>
+          <TableHeaderColumn dataField='source_price' dataFormat={numberWithCommas} dataSort={ true }>Jita Price</TableHeaderColumn>
+          <TableHeaderColumn dataField='source_quantity' dataFormat={numberWithCommas} dataSort={ true }>Jita Amount</TableHeaderColumn>
+          <TableHeaderColumn dataField='target_price' dataFormat={numberWithCommas} dataSort={ true }>DO6 Price</TableHeaderColumn>
+          <TableHeaderColumn dataField='target_quantity' dataFormat={numberWithCommas} dataSort={ true }>DO6 Amount</TableHeaderColumn>
+          <TableHeaderColumn dataField='daily_amount' dataFormat={numberWithCommas} dataSort={ true }>DO6 Daily</TableHeaderColumn>
+        </BootstrapTable>,
       </div>;
     } else {
       return <CenteredProgress />;

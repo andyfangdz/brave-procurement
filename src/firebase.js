@@ -27,6 +27,7 @@ export function login() {
         state: 'foo',
         scope: 'openid profile'
       },
+      sso: true
     }
   };
   let lock = new Auth0Lock('gJ8hjabdEzUM1nHFNTX6K80ehTZJY7Yw', 'andyfang.auth0.com', options);
